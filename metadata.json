@@ -1,0 +1,6 @@
+{
+  "name": "AirNix - Teacher OS & Digital Portal",
+  "description": "Comprehensive digital portal for educators: 3D interactive NFC Smart ID card, attendance tracking, grade monitoring, automated student growth analytics, classroom communication, and AI teaching assistant.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

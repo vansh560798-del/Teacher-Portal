@@ -1,0 +1,178 @@
+{
+  "entities": {
+    "Teacher": {
+      "title": "Teacher",
+      "description": "Digital teacher profile with staff ID, NFC card status, and emergency info.",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string", "maxLength": 128 },
+        "name": { "type": "string", "maxLength": 120, "minLength": 1 },
+        "photoUrl": { "type": "string", "maxLength": 500 },
+        "staffId": { "type": "string", "maxLength": 32, "pattern": "^[a-zA-Z0-9_-]+$" },
+        "designation": { "type": "string", "maxLength": 100 },
+        "department": { "type": "string", "maxLength": 100 },
+        "email": { "type": "string", "maxLength": 150 },
+        "phone": { "type": "string", "maxLength": 30 },
+        "nfcCardId": { "type": "string", "maxLength": 64, "pattern": "^[a-zA-Z0-9_-]+$" },
+        "cardStatus": { "type": "string", "enum": ["active", "suspended", "lost", "deactivated"] },
+        "biometricEnrolled": { "type": "boolean" },
+        "emergencyContactName": { "type": "string", "maxLength": 120 },
+        "emergencyContactPhone": { "type": "string", "maxLength": 30 },
+        "emergencyMedicalNotes": { "type": "string", "maxLength": 500 },
+        "role": { "type": "string", "enum": ["admin", "teacher"] },
+        "updatedAt": { "type": "string", "maxLength": 64 }
+      },
+      "required": ["userId", "name", "staffId", "designation", "department", "nfcCardId", "cardStatus"]
+    },
+    "AttendanceRecord": {
+      "title": "AttendanceRecord",
+      "description": "Smart attendance clock-in/out log for teachers and staff.",
+      "type": "object",
+      "properties": {
+        "teacherId": { "type": "string", "maxLength": 128 },
+        "teacherName": { "type": "string", "maxLength": 120 },
+        "staffId": { "type": "string", "maxLength": 32 },
+        "timestamp": { "type": "string", "maxLength": 64 },
+        "type": { "type": "string", "enum": ["check-in", "check-out"] },
+        "method": { "type": "string", "enum": ["nfc", "biometric", "manual", "qr"] },
+        "location": { "type": "string", "maxLength": 100 },
+        "status": { "type": "string", "enum": ["verified", "flagged"] },
+        "createdAt": { "type": "string", "maxLength": 64 }
+      },
+      "required": ["teacherId", "teacherName", "staffId", "timestamp", "type", "method", "status"]
+    },
+    "ClassItem": {
+      "title": "ClassItem",
+      "description": "Teacher assigned classroom timetable item.",
+      "type": "object",
+      "properties": {
+        "teacherId": { "type": "string", "maxLength": 128 },
+        "className": { "type": "string", "maxLength": 100 },
+        "grade": { "type": "string", "maxLength": 50 },
+        "room": { "type": "string", "maxLength": 50 },
+        "subject": { "type": "string", "maxLength": 100 },
+        "schedule": { "type": "string", "maxLength": 100 },
+        "studentCount": { "type": "number" }
+      },
+      "required": ["teacherId", "className", "grade", "room", "subject", "schedule", "studentCount"]
+    },
+    "Assignment": {
+      "title": "Assignment",
+      "description": "Teacher assignment given to students.",
+      "type": "object",
+      "properties": {
+        "teacherId": { "type": "string", "maxLength": 128 },
+        "classId": { "type": "string", "maxLength": 64 },
+        "className": { "type": "string", "maxLength": 100 },
+        "title": { "type": "string", "maxLength": 200 },
+        "instructions": { "type": "string", "maxLength": 2000 },
+        "dueDate": { "type": "string", "maxLength": 64 },
+        "maxScore": { "type": "number" },
+        "submissionsCount": { "type": "number" },
+        "status": { "type": "string", "enum": ["active", "graded", "draft"] },
+        "createdAt": { "type": "string", "maxLength": 64 }
+      },
+      "required": ["teacherId", "className", "title", "dueDate", "maxScore", "status"]
+    },
+    "GradeRecord": {
+      "title": "GradeRecord",
+      "description": "Student grade and progress tracking record.",
+      "type": "object",
+      "properties": {
+        "teacherId": { "type": "string", "maxLength": 128 },
+        "classId": { "type": "string", "maxLength": 64 },
+        "assignmentId": { "type": "string", "maxLength": 64 },
+        "studentId": { "type": "string", "maxLength": 64 },
+        "studentName": { "type": "string", "maxLength": 100 },
+        "score": { "type": "number" },
+        "maxScore": { "type": "number" },
+        "letterGrade": { "type": "string", "maxLength": 10 },
+        "feedback": { "type": "string", "maxLength": 1000 },
+        "date": { "type": "string", "maxLength": 64 }
+      },
+      "required": ["teacherId", "studentId", "studentName", "score", "maxScore", "letterGrade"]
+    },
+    "Resource": {
+      "title": "Resource",
+      "description": "Teaching resource library note, PDF, plan, or presentation.",
+      "type": "object",
+      "properties": {
+        "teacherId": { "type": "string", "maxLength": 128 },
+        "title": { "type": "string", "maxLength": 200 },
+        "type": { "type": "string", "enum": ["note", "pdf", "plan", "presentation"] },
+        "subject": { "type": "string", "maxLength": 100 },
+        "description": { "type": "string", "maxLength": 1000 },
+        "fileUrl": { "type": "string", "maxLength": 500 },
+        "tags": { "type": "string", "maxLength": 200 },
+        "createdAt": { "type": "string", "maxLength": 64 }
+      },
+      "required": ["teacherId", "title", "type", "subject"]
+    },
+    "LeaveRequest": {
+      "title": "LeaveRequest",
+      "description": "Teacher leave request and approval tracking.",
+      "type": "object",
+      "properties": {
+        "teacherId": { "type": "string", "maxLength": 128 },
+        "teacherName": { "type": "string", "maxLength": 120 },
+        "leaveType": { "type": "string", "enum": ["sick", "casual", "medical", "conference", "maternity"] },
+        "startDate": { "type": "string", "maxLength": 64 },
+        "endDate": { "type": "string", "maxLength": 64 },
+        "reason": { "type": "string", "maxLength": 500 },
+        "status": { "type": "string", "enum": ["pending", "approved", "rejected"] },
+        "reviewedBy": { "type": "string", "maxLength": 120 },
+        "createdAt": { "type": "string", "maxLength": 64 }
+      },
+      "required": ["teacherId", "teacherName", "leaveType", "startDate", "endDate", "reason", "status"]
+    },
+    "SecurityAlert": {
+      "title": "SecurityAlert",
+      "description": "Real-time security alert for lost credentials or suspicious access.",
+      "type": "object",
+      "properties": {
+        "teacherId": { "type": "string", "maxLength": 128 },
+        "cardId": { "type": "string", "maxLength": 64 },
+        "type": { "type": "string", "enum": ["lost_card", "unauthorized_scan", "tamper_detected", "biometric_mismatch"] },
+        "severity": { "type": "string", "enum": ["low", "medium", "high", "critical"] },
+        "details": { "type": "string", "maxLength": 500 },
+        "resolved": { "type": "boolean" },
+        "timestamp": { "type": "string", "maxLength": 64 }
+      },
+      "required": ["cardId", "type", "severity", "details", "resolved", "timestamp"]
+    }
+  },
+  "firestore": {
+    "/teachers/{teacherId}": {
+      "schema": "Teacher",
+      "description": "Stores digital teacher profile data."
+    },
+    "/attendance/{attendanceId}": {
+      "schema": "AttendanceRecord",
+      "description": "Stores teacher check-in and check-out logs."
+    },
+    "/classes/{classId}": {
+      "schema": "ClassItem",
+      "description": "Stores scheduled classes and timetable assignments."
+    },
+    "/assignments/{assignmentId}": {
+      "schema": "Assignment",
+      "description": "Stores assignments created by teachers."
+    },
+    "/grades/{gradeId}": {
+      "schema": "GradeRecord",
+      "description": "Stores student grades and performance reports."
+    },
+    "/resources/{resourceId}": {
+      "schema": "Resource",
+      "description": "Stores notes, lesson plans, PDFs, and presentations."
+    },
+    "/leaves/{leaveId}": {
+      "schema": "LeaveRequest",
+      "description": "Stores teacher leave applications and approval state."
+    },
+    "/security_alerts/{alertId}": {
+      "schema": "SecurityAlert",
+      "description": "Stores security events, lost card flags, and access anomalies."
+    }
+  }
+}
